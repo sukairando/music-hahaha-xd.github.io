@@ -30,11 +30,61 @@
 
 <iframe width="50" height="100" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/225777669&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/ramstarofficial" title="Ramstar ✪" target="_blank" style="color: #cccccc; text-decoration: none;">Ramstar ✪</a> · <a href="https://soundcloud.com/ramstarofficial/route-24-pokemon-remix-ramstar" title="Route 24 (Pokémon Remix) - Ramstar" target="_blank" style="color: #cccccc; text-decoration: none;">Route 24 (Pokémon Remix) - Ramstar</a></div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-<script src="//connect.soundcloud.com/sdk-2.0.0.js"></script>
+Track = function (225777669){
 
-<div class="music-player">
-    <a href="#" id="play">Play</a>
-    <a href="#" id="pause" style="display:none;">Pause</a>
-    <a href="#" id="stop">Stop</a>
-</div>
+    var currentTrack = "";
+
+   SC.initialize({
+
+        client_id: "17a992358db64d99e492326797fff3e8"
+    });
+
+    SC.stream("http://api.soundcloud.com/tracks/" + trackId, function(sound){
+        currentTrack = sound;
+    });
+
+    this.play = function() {
+        currentTrack.play();
+    };
+
+    this.pause = function() {
+        currentTrack.pause();
+    };
+
+    this.stop = function() {
+        currentTrack.stop();
+    };
+};
+
+Rotation = function(tracks) {
+    var currentTrack = tracks[0];
+
+    this.currentTrack = function () {
+        return currentTrack;
+    };
+};
+
+$(document).ready (function(){
+    var songs = [{"soundcloud_id":"108816655"},{"soundcloud_id":"79408289"}]
+    var rotation = new Rotation(songs);
+    var currentTrack = rotation.currentTrack();
+    var currentPlayingTrack = new Track(currentTrack.soundcloud_id);
+
+    $('#play').on('click', function(event){
+        currentPlayingTrack.play();
+        $('#pause').show();
+        $('#play').hide();
+    });
+
+    $('#pause').on('click', function(event){
+        currentPlayingTrack.pause();
+        $('#pause').hide();
+        $('#play').show();
+    });
+
+    $('#stop').on('click', function(event){
+        currentPlayingTrack.stop();
+        $('#pause').hide();
+        $('#play').show();
+    });        
+});
